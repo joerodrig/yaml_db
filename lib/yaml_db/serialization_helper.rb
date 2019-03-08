@@ -165,7 +165,7 @@ module YamlDb
       end
 
       def self.tables
-        whitelist = ENV['whitelisted_tables']
+        whitelist = ENV['whitelisted_tables'].split(':')
         raise StandardError, "Whitelist is required" if whitelist.empty?
 
         ActiveRecord::Base.connection
