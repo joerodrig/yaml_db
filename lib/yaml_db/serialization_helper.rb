@@ -165,7 +165,12 @@ module YamlDb
       end
 
       def self.tables
-        ActiveRecord::Base.connection.tables.reject { |table| ['schema_info', 'schema_migrations'].include?(table) }.sort
+        whitelist = ENV['whitelisted_tables']
+        raise StandardError, "Whitelist is required" if whitelist.empty?
+
+        ActiveRecord::Base.connection
+                          .tables
+                          .reject { |table| !whitelist.include?(table) }
       end
 
       def self.dump_table(io, table)
